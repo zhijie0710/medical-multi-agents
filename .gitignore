@@ -1,0 +1,8 @@
+hf_1.env
+Main.py
+test_api.py
+Utils/Agents.py
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
