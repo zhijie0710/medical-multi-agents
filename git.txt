@@ -1,0 +1,23 @@
+
+#初始使用git时：
+git init 
+# 在你的文件夹里创建 .git/ 文件夹, 里面保存了整个版本控制的信息（提交历史、分支、暂存区等）。
+
+git add .
+# Git 会把当前修改的文件快照放到“暂存区”。暂存区相当于“准备提交的缓存区”。
+
+git commit -m "Initial commit"
+# 把暂存区的快照保存到本地仓库，形成一个提交（commit）。每个提交都有一个唯一的 哈希值（SHA-1/ SHA-256），用来标识版本。
+
+git remote add origin git@github.com:zhijie0710/medical-multi-agents.git
+# 这里 origin 是远程仓库的名字。Git 会记录远程仓库地址，但不会自动上传。
+
+git push -u origin main
+# Git 找到你本地的提交对象（commit）。通过 SSH 连接，把这些对象发送到 GitHub。GitHub 接收后把提交存储到服务器上的仓库。main 分支的指针更新到最新提交。
+
+
+
+# 已使用ssh key，下次再更新文档时：
+git add .
+git commit -m "update something"
+git push origin main
