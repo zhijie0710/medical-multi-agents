@@ -5,6 +5,8 @@ from huggingface_hub import InferenceClient
 import faiss
 import pickle
 import numpy as np
+import tools
+
 
 class MyRetriever:
     def __init__(self, index_path="medical_docs.index", docs_path="medical_docs.pkl", model_name="BAAI/bge-small-en", token=None):
@@ -139,6 +141,25 @@ class Agent:
             print(rag_context)
             print("="*50)
 
+
+
+
+        # 可选的 Tool Use：调用 tools.py 的函数
+        tool_output = ""
+        try:
+            if self.role == "Cardiologist":
+                tool_output = tools.analyze_lab_values(self.medical_report)
+            elif self.role == "Psychologist":
+                tool_output = tools.assess_psych_risk(self.medical_report)
+        except Exception as e:
+            print(f"Tool call failed for {self.role}: {e}")
+
+        if tool_output:
+            print(f"\n=== Tool Output for {self.role} ===")
+            print(tool_output)
+            print("="*50)
+
+
         # 格式化 prompt
         if self.role == "MultidisciplinaryTeam":
             prompt = self.prompt_template.format()
@@ -146,6 +167,8 @@ class Agent:
             prompt = self.prompt_template.format(medical_report=self.medical_report)
             if rag_context:
                 prompt = f"### Reference from external medical library:\n{rag_context}\n\n{prompt}"
+            if tool_output:
+                prompt = f"### Tool-assisted analysis:\n{tool_output}\n\n{prompt}"
 
         try:
             response = self.model.invoke(prompt)
